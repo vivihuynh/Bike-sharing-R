@@ -6,4 +6,6 @@ Last updated: Tuesday October 4th, 2022
 
   This case study will explore the differences between members & casual users, their riding patterns, seasonality, etc. to help assist with designing a marketing conversion strategy. R was used to prepare and clean data for analysis. All visualization was done with Tableau and uploaded on Tableau Public with the link below.
 
+  Here is a walkthrough of my project:
+    1. (Introduction/Background)[https://github.com/vivihuynh/Bike-sharing-R/blob/main/introduction.md]
 
