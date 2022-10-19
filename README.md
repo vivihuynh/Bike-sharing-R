@@ -8,5 +8,5 @@ Last updated: Tuesday October 4th, 2022
 
   Here is a walkthrough of my project:
   
-    1. [Introduction/Background](https://github.com/vivihuynh/Bike-sharing-R/blob/main/introduction.md)
+  1) [Introduction](https://github.com/vivihuynh/Bike-sharing-R/blob/main/introduction.md)
 
