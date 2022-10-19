@@ -15,12 +15,5 @@
  
  The data I used for analysis can be found [here](https://divvy-tripdata.s3.amazonaws.com/index.html)
  
- ---
- # Is the data reliable?
- 1. Data is reliable since it is internal data provided by the company itself
- 2. Data is original (internal data)
- 3. Data is comprehensive for the purpose of our case study. It provides information on location, trip start and end time, membership type, etc.
- 4. Data is current and up to date. I will be using the latest data within one year of the project date (August of 2021 and July of 2022)
- 5. Data is cited
-
+ 
  
