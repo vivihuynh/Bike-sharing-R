@@ -2,6 +2,8 @@
 Vivi Huynh
 Last updated: Tuesday October 4th, 2022
 
-This is a capstone project for Google Data Analytics Professional Certificate. This case study explores a real-world public dataset from Divvy, a bike-sharing company located in Chicago. The system provides bicycles in a city-wide network of docking stations which can be accessed by annual members or casual users who purchase a single-ride or day pass. Over four million rides were taken between June 2020 and July 2021.
+  This case study explores a real-world public dataset made available by Motivate International which operates Divvy, a Chicago based bike-sharing company that provides bicycles for sharing in a city-wide network of docking stations. These bicycles can be accessed by annual members or casual users who purchase a single-ride or day pass. I analyzed data for over three million rides taken between August of 2021 and July of 2022 (one year worth of data).
 
-This case study will explore the differences in bike riding habits between members and casual riders that can help the company derives a conversion strategy. The data cleaning process was done using R, and visualization with Tableau.
+  This case study will explore the differences between members & casual users, their riding patterns, seasonality, etc. to help assist with designing a marketing conversion strategy. R was used to prepare and clean data for analysis. All visualization was done with Tableau and uploaded on Tableau Public with the link below.
+
+
