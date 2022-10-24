@@ -81,24 +81,32 @@ total_trips$ride_length <- as.numeric(as.character(total_trips$ride_length))
 is.numeric(total_trips$ride_length)
 #Ensure that it's a numeric for calculation
 #Remove all rows where duration of ride is negative & create a new cleaned data frame 
-total_trips_v2 <- total_trips[!(total_trips$ride_length<0),]
+#total_trips_v2 <- total_trips[!(total_trips$ride_length<0),]
+total_trips <- distinct(total_trips) #remove duplicate rows 
+total_trips <- total_trips %>%  #remove columns not needed: ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
+  select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng)) %>%
+  filter(
+    start_station_name != "",
+    end_station_name != "",
+    ride_length < 86400,
+    ride_length > 60)
 #Done cleaning
 
-#Analysis
+#Quick Analysis
 #Descriptive analysis of ride length
-summary(total_trips_v2$ride_length)
+summary(total_trips$ride_length)
 #Comparing ride length between casual and members
-aggregate(total_trips_v2$ride_length ~ total_trips_v2$member_casual, FUN = min)
-aggregate(total_trips_v2$ride_length ~ total_trips_v2$member_casual, FUN = max)
-aggregate(total_trips_v2$ride_length ~ total_trips_v2$member_casual, FUN = mean)
-aggregate(total_trips_v2$ride_length ~ total_trips_v2$member_casual, FUN = median)
+aggregate(total_trips$ride_length ~ total_trips$member_casual, FUN = min)
+aggregate(total_trips$ride_length ~ total_trips$member_casual, FUN = max)
+aggregate(total_trips$ride_length ~ total_trips$member_casual, FUN = mean)
+aggregate(total_trips$ride_length ~ total_trips$member_casual, FUN = median)
 #Notice for ride length, casual > members
 #Comparing the average ride length by day between casual and members
-total_trips_v2$day_of_week <- ordered(total_trips_v2$day_of_week, levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
-aggregate(total_trips_v2$ride_length ~ total_trips_v2$member_casual + total_trips_v2$day_of_week, FUN = mean)
+total_trips$day_of_week <- ordered(total_trips$day_of_week, levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
+aggregate(total_trips$ride_length ~ total_trips$member_casual + total_trips$day_of_week, FUN = mean)
 
 #Visualize and compare the number of rides between member vs casual by day
-total_trips_v2 %>%
+total_trips %>%
     mutate(weekday = wday(started_at, label = TRUE)) %>%    #creates weekday field
     group_by(member_casual,weekday) %>%  
     summarise(number_of_rides = n(), average_duration = mean(ride_length)) %>%
@@ -106,7 +114,7 @@ total_trips_v2 %>%
     ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + geom_col(position = "dodge") + labs(title = "how does casual users and members riding habit differs throughout the week?", subtitle = "Data spans over 12 months", y = "Number of rides", x = "Day of the week", fill = "Rider type")
 #visualize with bar graph
 #Visualize and compare the ride length between member vs casual by day
-total_trips_v2 %>%
+total_trips %>%
   mutate(weekday = wday(started_at, label = TRUE)) %>%    #
   group_by(member_casual,weekday) %>%
   summarise(number_of_rides = n(), average_duration = mean(ride_length)) %>%
@@ -116,7 +124,7 @@ total_trips_v2 %>%
 
 #Export summary csv file for visualization via tableau 
 getwd()
-write_csv(total_trips_v2, file = "year_summary_cleaned.csv")
+write_csv(total_trips, file = "final_summary.csv")
 #Save to current working directory 
 
 
