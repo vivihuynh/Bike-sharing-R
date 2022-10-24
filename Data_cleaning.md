@@ -84,7 +84,19 @@ str(total_trips)
 ---
 ## Data Cleaning and Preprocessing
 ### Getting data into a workable format
-  - made sure all of the date and time information
+  - made sure all of the date and time information are in workable format and added new variables as needed for analysis
+#### New variables added
+  - `hour`: Give hour of the day 
+  - `date`: Format date as yyyy-mm-dd
+  - `year`: Give 4 digits year
+  - `month`: Give month as a number from 1-12 (1 as January)
+  - `day`: Give day as a number from 0-31
+  - `day_of_week`: Give unabbreviated day of the week
+  - `ride_length`: Give duration of ride in seconds from start time to end time. Some length are negative, and will be filtered out later. This is due to Divvy taking bikes in and out of dock for quality control.
+
+#### Issues Resolved
+  - **Unreasonable Ride Length:** There are many rows with ride length as negative, too short or too long. I filtered out any trips with trip duration < 0 and are shorter than 1 minute or longer than 24 hours. The reason for these trip durations may be due to maintenance, system errors, etc. These values will either be outliers or irrelevant to our analysis; Therefore, it is better to remove them
+  - **Missing or Blank values:** There are many rows with missing values (mainly location information). I decided to remove any rows with missing starting and ending time as well as starting and ending station. It's reasonable to remove them because there's still enough data to perform analysis.
 
 ``` r
 #Clean data
@@ -109,5 +121,7 @@ is.numeric(total_trips$ride_length)
 #Ensure that it's a numeric for calculation
 #Remove all rows where duration of ride is negative & create a new cleaned data frame 
 total_trips_v2 <- total_trips[!(total_trips$ride_length<0),]
+total_trips_v2 <- na.omit(total_trips_v2) #remove rows with NA values
+total_trips_v2 <- distinct(total_trips_v2) #remove duplicate rows 
 #Done cleaning
 ``` 
