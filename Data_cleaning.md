@@ -72,7 +72,7 @@ total_trips <- bind_rows(aug_2021,sep_2021,oct_2021,nov_2021,dec_2021,jan_2022,f
 
 ---
 ## Summary of data
-Let's take a look at the data and what information it gives us... talk more about summary data
+Let's take a look at the data and what information it gives us.
 ``` r
 #Inspect newly combined data frame
 colnames(total_trips)
@@ -174,4 +174,5 @@ total_trips <- total_trips %>%  #remove columns not needed: ride_id, start_stati
     ride_length < 86400,
     ride_length > 60)
 #Done cleaning
+#110579 rows removed
 ``` 
