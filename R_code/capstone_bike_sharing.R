@@ -7,7 +7,7 @@ library(lubridate)
 library(ggplot2)
 
 #Set working directory to where cvs files are
-setwd("/Users/vivi/Documents/google_cert/Divvy_case_study/CSV")
+setwd("/Users/vivi/Documents/google_cert/Divvy_case_study/Finished/Divvy_data_csv")
 
 #Upload 12 months of divvy trip data
 aug_2021 <- read_csv("202108-divvy-tripdata.csv")
@@ -56,9 +56,11 @@ total_trips <- bind_rows(aug_2021,sep_2021,oct_2021,nov_2021,dec_2021,jan_2022,f
 #Inspect newly combined data frame
 colnames(total_trips)
 nrow(total_trips)
+#give total number of trips
 dim(total_trips)
-summary(total_trips)
+#give dimension (columns) of dataframe
 str(total_trips)
+#display internal structure
 
 #Clean data
 table(total_trips$member_casual) 
@@ -86,11 +88,15 @@ total_trips <- distinct(total_trips) #remove duplicate rows
 total_trips <- total_trips %>%  #remove columns not needed: ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
   select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng)) %>%
   filter(
-    start_station_name != "",
-    end_station_name != "",
+    !is.na(started_at),
+    !is.na(ended_at),
     ride_length < 86400,
     ride_length > 60)
+#remove any rows with no starting and ending time or unreasonable trip length
 #Done cleaning
+
+nrow(total_trips)
+#110579 rows removed
 
 #Quick Analysis
 #Descriptive analysis of ride length
@@ -107,11 +113,11 @@ aggregate(total_trips$ride_length ~ total_trips$member_casual + total_trips$day_
 
 #Visualize and compare the number of rides between member vs casual by day
 total_trips %>%
-    mutate(weekday = wday(started_at, label = TRUE)) %>%    #creates weekday field
-    group_by(member_casual,weekday) %>%  
-    summarise(number_of_rides = n(), average_duration = mean(ride_length)) %>%
-    arrange(member_casual,weekday) %>%  #arrange in desc order by rider type and weekday
-    ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + geom_col(position = "dodge") + labs(title = "how does casual users and members riding habit differs throughout the week?", subtitle = "Data spans over 12 months", y = "Number of rides", x = "Day of the week", fill = "Rider type")
+  mutate(weekday = wday(started_at, label = TRUE)) %>%    #creates weekday field
+  group_by(member_casual,weekday) %>%  
+  summarise(number_of_rides = n(), average_duration = mean(ride_length)) %>%
+  arrange(member_casual,weekday) %>%  #arrange in desc order by rider type and weekday
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) + geom_col(position = "dodge") + labs(title = "how does casual users and members riding habit differs throughout the week?", subtitle = "Data spans over 12 months", y = "Number of rides", x = "Day of the week", fill = "Rider type")
 #visualize with bar graph
 #Visualize and compare the ride length between member vs casual by day
 total_trips %>%
@@ -126,6 +132,3 @@ total_trips %>%
 getwd()
 write_csv(total_trips, file = "final_summary.csv")
 #Save to current working directory 
-
-
-
