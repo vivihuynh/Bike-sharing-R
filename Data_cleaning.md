@@ -76,11 +76,54 @@ Let's take a look at the data and what information it gives us... talk more abou
 ``` r
 #Inspect newly combined data frame
 colnames(total_trips)
-nrow(total_trips)
-dim(total_trips)
-summary(total_trips)
-str(total_trips)
 ```
+
+    ##  [1] "ride_id"            "rideable_type"      "started_at"        
+    ##  [4] "ended_at"           "start_station_name" "start_station_id"  
+    ##  [7] "end_station_name"   "end_station_id"     "start_lat"         
+    ## [10] "start_lng"          "end_lat"            "end_lng"           
+    ## [13] "member_casual"
+    
+``` r
+nrow(total_trips)
+#give total number of trips
+```
+    ## [1] 5901463
+
+``` r
+dim(total_trips)
+#give dimension (columns) of dataframe
+```
+    ## [1] 13
+``` r
+str(total_trips)
+#display internal structure
+```
+| Character            |    
+|:---------------------|
+| ride\_id             |
+| start\_station\_name |   
+| start\_station\_id   |     
+| end\_station\_name   |      
+| end\_station\_id     |
+
+| Factor               |    
+|:---------------------|
+| rideable\_type       |
+| member\_casual       |   
+
+| Numeric              |    
+|:---------------------|
+| start\_lat           |
+| start\_lng           |   
+| end\_lat             |      
+| end\_lng             |
+
+| POSIXct              |    
+|:---------------------|
+| started\_at          |
+| ended\_at            | 
+
 ---
 ## Data Cleaning and Preprocessing
 ### Getting data into a workable format
@@ -96,7 +139,8 @@ str(total_trips)
 
 #### Issues Resolved
   - **Unreasonable Ride Length:** There are many rows with ride length as negative, too short or too long. I filtered out any trips with trip duration < 0 and are shorter than 1 minute or longer than 24 hours. The reason for these trip durations may be due to maintenance, system errors, etc. These values will either be outliers or irrelevant to our analysis; Therefore, it is better to remove them
-  - **Missing or Blank values:** There are many rows with missing values (mainly location information). I decided to remove any rows with missing starting and ending time as well as starting and ending station. It's reasonable to remove them because there's still enough data to perform analysis.
+  - **Missing,blank, duplicate values:** There are many rows with missing values (mainly location information). I decided to only remove any rows with missing starting and ending time.It's reasonable to remove them because there'd still enough data to perform analysis. I didn't remove rows with missing location information because we will only analyze the top 10 stations customers visit.Removing these as well will remove approximately 20% of our data, which can be use for analysis on trip length, etc.
+       - 110579 rows removed
 
 ``` r
 #Clean data
@@ -120,8 +164,14 @@ total_trips$ride_length <- as.numeric(as.character(total_trips$ride_length))
 is.numeric(total_trips$ride_length)
 #Ensure that it's a numeric for calculation
 #Remove all rows where duration of ride is negative & create a new cleaned data frame 
-total_trips_v2 <- total_trips[!(total_trips$ride_length<0),]
-total_trips_v2 <- na.omit(total_trips_v2) #remove rows with NA values
-total_trips_v2 <- distinct(total_trips_v2) #remove duplicate rows 
+#total_trips_v2 <- total_trips[!(total_trips$ride_length<0),]
+total_trips <- distinct(total_trips) #remove duplicate rows 
+total_trips <- total_trips %>%  #remove columns not needed: ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
+  select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng)) %>%
+  filter(
+    !is.na(started_at),
+    !is.na(ended_at),
+    ride_length < 86400,
+    ride_length > 60)
 #Done cleaning
 ``` 
