@@ -164,7 +164,6 @@ total_trips$ride_length <- as.numeric(as.character(total_trips$ride_length))
 is.numeric(total_trips$ride_length)
 #Ensure that it's a numeric for calculation
 #Remove all rows where duration of ride is negative & create a new cleaned data frame 
-#total_trips_v2 <- total_trips[!(total_trips$ride_length<0),]
 total_trips <- distinct(total_trips) #remove duplicate rows 
 total_trips <- total_trips %>%  #remove columns not needed: ride_id, start_station_id, end_station_id, start_lat, start_long, end_lat, end_lng
   select(-c(ride_id, start_station_id, end_station_id,start_lat,start_lng,end_lat,end_lng)) %>%
@@ -173,6 +172,7 @@ total_trips <- total_trips %>%  #remove columns not needed: ride_id, start_stati
     !is.na(ended_at),
     ride_length < 86400,
     ride_length > 60)
+#remove any rows with no starting and ending time or unreasonable trip length
 #Done cleaning
 #110579 rows removed
 ``` 
