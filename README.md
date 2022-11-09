@@ -10,4 +10,8 @@ Last updated: Tuesday October 4th, 2022
   
   1) [Introduction](https://github.com/vivihuynh/Bike-sharing-R/blob/main/introduction.md)
   2) [Data Cleaning and Preprocessing](https://github.com/vivihuynh/Bike-sharing-R/blob/main/Data_cleaning.md)
+  
+  
+[Tableau](https://public.tableau.com/app/profile/vivi7442/viz/bikesharing_16679636859300/Dashboard1
+)
 
